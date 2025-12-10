@@ -49,7 +49,6 @@
             </div>
 
             <div class="col-md-4">
-                <label class="form-label">&nbsp;</label>
                 <button class="btn btn-outline-primary w-100" @click="resetFilters">
                     Reset Filters
                 </button>
