@@ -24,7 +24,7 @@ class CourseController extends Controller
     /**
      * @return JsonResponse
      */
-    public function getAll(): JsonResponse
+    public function getCourses(): JsonResponse
     {
         try {
             $courses = $this->courseService->getAll();

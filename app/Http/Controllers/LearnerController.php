@@ -8,7 +8,6 @@ use App\Services\CourseService;
 use App\Services\LearnerService;
 use App\Traits\ApiResponder;
 use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
 
 class LearnerController extends Controller
 {
@@ -23,16 +22,11 @@ class LearnerController extends Controller
         $this->learnerService = $learnerService;
     }
 
-    public function index(): View
-    {
-        return view("learner-progress");
-    }
-
     /**
      * @param LearnerProgressRequest $request
      * @return JsonResponse
      */
-    public function getData(LearnerProgressRequest $request): JsonResponse
+    public function getLearners(LearnerProgressRequest $request): JsonResponse
     {
         try {
             $learners = $this->learnerService->getAll($request->get("course"), $request->get("sort"));
