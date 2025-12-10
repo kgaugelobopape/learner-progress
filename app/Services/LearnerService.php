@@ -3,44 +3,37 @@
 namespace App\Services;
 
 use App\Repositories\Interfaces\LearnerRepositoryInterface;
+use Illuminate\Support\Collection;
 
-class LearnerProgressService
+class LearnerService
 {
-    private LearnerRepositoryInterface $enrolmentRepository;
+    private LearnerRepositoryInterface $learnerRepository;
 
-    public function __construct(LearnerRepositoryInterface $enrolmentRepository) {
-        $this->enrolmentRepository = $enrolmentRepository;
+    public function __construct(LearnerRepositoryInterface $learnerRepository) {
+        $this->learnerRepository = $learnerRepository;
     }
 
     /**
      * @param string|null $courseName
      * @param string|null $sortBy
-     * @return array
+     * @return Collection
      */
-    public function getLearnerProgress(?string $courseName = null, ?string $sortBy = null): array
+    public function getAll(?string $courseName = null, ?string $sortBy = null): Collection
     {
-        $enrolments = $courseName
-            ? $this->enrolmentRepository->getByCourseName($courseName)
-            : $this->enrolmentRepository->getAllWithRelations();
+        $learners = $courseName
+            ? $this->learnerRepository->getByCourseName($courseName)
+            : $this->learnerRepository->getAll();
 
-        $groupedByLearner = $enrolments->groupBy("learner_id");
+        // Calculate average progress for each learner
+        $learners->transform(function ($learner) {
+            $totalCourses = $learner->courses->count();
+            $coursesProgressSum = $learner->courses->sum(fn($course) => $course->pivot->progress);
 
-        $learners = $groupedByLearner->map(function ($learnerEnrolments) {
-            $firstEnrolment = $learnerEnrolments->first();
+            $average = $totalCourses ?  $coursesProgressSum / $totalCourses : 0;
 
-            return [
-                "id" => $firstEnrolment->learner->id,
-                "name" => $firstEnrolment->learner->name,
-                "courses" => $learnerEnrolments->map(function ($enrolment) {
-                    return [
-                        "id" => $enrolment->course->id,
-                        "name" => $enrolment->course->name,
-                        "progress" => $enrolment->progress_percentage,
-                    ];
-                })->values()->toArray(),
-                "average_progress" => round($learnerEnrolments->avg("progress_percentage"), 2),
-            ];
-        })->values();
+            $learner->average_progress = round($average, 2);
+            return $learner;
+        });
 
         if ($sortBy === "progress_asc") {
             $learners = $learners->sortBy("average_progress")->values();
@@ -48,14 +41,6 @@ class LearnerProgressService
             $learners = $learners->sortByDesc("average_progress")->values();
         }
 
-        return $learners->toArray();
-    }
-
-    /**
-     * @return array
-     */
-    public function getAllCourseNames(): array
-    {
-        return $this->enrolmentRepository->getAllCourseNames()->toArray();
+        return $learners;
     }
 }

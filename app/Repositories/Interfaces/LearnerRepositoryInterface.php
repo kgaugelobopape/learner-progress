@@ -4,9 +4,8 @@ namespace App\Repositories\Interfaces;
 
 use Illuminate\Support\Collection;
 
-interface EnrolmentRepositoryInterface
+interface LearnerRepositoryInterface
 {
-    public function getAllWithRelations(): Collection;
+    public function getAll(): Collection;
     public function getByCourseName(string $courseName): Collection;
-    public function getAllCourseNames(): Collection;
 }

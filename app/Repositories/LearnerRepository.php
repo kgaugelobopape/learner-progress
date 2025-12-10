@@ -2,18 +2,18 @@
 
 namespace App\Repositories;
 
-use App\Models\Enrolment;
-use App\Repositories\Interfaces\EnrolmentRepositoryInterface;
+use App\Models\Learner;
+use App\Repositories\Interfaces\LearnerRepositoryInterface;
 use Illuminate\Support\Collection;
 
-class EnrolmentRepository implements EnrolmentRepositoryInterface
+class LearnerRepository implements LearnerRepositoryInterface
 {
     /**
      * @return Collection
      */
-    public function getAllWithRelations(): Collection
+    public function getAll(): Collection
     {
-        return Enrolment::with(["learner", "course"])->get();
+        return Learner::with(["courses"])->get();
     }
 
     /**
@@ -22,23 +22,10 @@ class EnrolmentRepository implements EnrolmentRepositoryInterface
      */
     public function getByCourseName(string $courseName): Collection
     {
-        return Enrolment::with(["learner", "course"])
-            ->whereHas("course", function ($query) use ($courseName) {
-                $query->where("name", $courseName);
+        return Learner::with(["courses"])
+            ->whereHas("courses", function ($query) use ($courseName) {
+                $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($courseName).'%']);
             })
             ->get();
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getAllCourseNames(): Collection
-    {
-        return Enrolment::with("course")
-            ->get()
-            ->pluck("course.name")
-            ->unique()
-            ->sort()
-            ->values();
     }
 }
