@@ -3,15 +3,12 @@
 ## Getting Started
 
 ### Setup Instructions
-1. Run `composer install`
-2. Configure your `.env` file from the example
-3. Generate the App Key: `php artisan key:generate`
-4. Run migrations and seeders: `php artisan migrate --seed`
-5. Start the development server: `php artisan serve`
-
-### Database Setup
-1. `php artisan migrate`
-2. `php artisan db:seed`
+1. Clone repo and cd into project folder
+2. Run `composer install`
+3. Configure your `.env` file from the example
+4. Generate the App Key: `php artisan key:generate`
+5. Create SQLite DB `touch database/database.sqlite`
+6. Run migrations and seeders: `php artisan migrate --seed`
 
 ### App Setup
 1. `npm install vue @vitejs/plugin-vue`
