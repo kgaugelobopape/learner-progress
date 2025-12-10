@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Enrolment extends Model
 {
@@ -18,7 +19,7 @@ class Enrolment extends Model
      *
      * @var string
      */
-    protected $table = 'enrolments';
+    protected $table = "enrolments";
 
     /**
      * The attributes that are mass assignable.
@@ -26,9 +27,9 @@ class Enrolment extends Model
      * @var array
      */
     protected $fillable = [
-        'learner_id',
-        'course_id',
-        'progress',
+        "learner_id",
+        "course_id",
+        "progress",
     ];
 
     /**
@@ -37,6 +38,22 @@ class Enrolment extends Model
      * @var array
      */
     protected $casts = [
-        'progress' => 'decimal:2',
+        "progress" => "decimal:2",
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function learner(): BelongsTo
+    {
+        return $this->belongsTo(Learner::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function course(): BelongsTo
+    {
+        return $this->belongsTo(Course::class);
+    }
 }
