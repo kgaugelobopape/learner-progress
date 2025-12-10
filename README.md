@@ -13,13 +13,15 @@
 1. `php artisan migrate`
 2. `php artisan db:seed`
 
-### Run Application
-1. `php artisan serve` 
-2. Visit: http://localhost:8000
-
 ### App Setup
 1. `npm install vue @vitejs/plugin-vue`
-2. `npm i && npm run build`
+2.  `npm install bootstrap@5` for bootstrap UI library
+3. `npm install` to add all dependencies
+4. `npm run build` to recompile changes
+
+### Run Application locally
+1. Run `php artisan serve`
+2. Visit: http://localhost:8000
 
 ## Key Features Implemented
 1. Clean Architecture - Repository Pattern with Service Layer separation
