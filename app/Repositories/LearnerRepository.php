@@ -9,23 +9,44 @@ use Illuminate\Support\Collection;
 class LearnerRepository implements LearnerRepositoryInterface
 {
     /**
+     * @param string $sortBy
+     * @param int $paginate
      * @return Collection
      */
-    public function getAll(): Collection
+    public function getAll(string $sortBy, int $paginate = 15): Collection
     {
-        return Learner::with(["courses"])->get();
+        $learners = Learner::with(["courses"])
+            ->withAvg("enrolments as average_progress", "progress");
+
+        if ($sortBy === "desc") {
+            $learners->orderBy("average_progress", "DESC");
+        } elseif ($sortBy === "asc") {
+            $learners->orderBy("average_progress", "ASC");
+        }
+
+        return $learners->get();
     }
 
     /**
      * @param string $courseName
+     * @param $sortBy
+     * @param int $paginate
      * @return Collection
      */
-    public function getByCourseName(string $courseName): Collection
+    public function getByCourseName(string $courseName, $sortBy, int $paginate = 15): Collection
     {
-        return Learner::with(["courses"])
+        $learners = Learner::with(["courses"])
+            ->withAvg("enrolments as average_progress", "progress")
             ->whereHas("courses", function ($query) use ($courseName) {
-                $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($courseName).'%']);
-            })
-            ->get();
+                $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($courseName) . '%']);
+            });
+
+        if ($sortBy === "desc") {
+            $learners->orderBy("average_progress", "DESC");
+        } elseif ($sortBy === "asc") {
+            $learners->orderBy("average_progress", "ASC");
+        }
+
+        return $learners->get();
     }
 }

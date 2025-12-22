@@ -23,7 +23,7 @@ class LearnerProgressRequest extends FormRequest
     {
         return [
             'course' => 'nullable|string',
-            'sort' => 'nullable|in:progress_asc,progress_desc',
+            'sort' => 'nullable|in:asc,desc',
         ];
     }
 }

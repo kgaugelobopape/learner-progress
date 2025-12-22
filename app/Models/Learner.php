@@ -32,4 +32,12 @@ class Learner extends Model
     public function getFullNameAttribute(): string {
         return $this->firstname. " ".$this->lastname;
     }
+
+    /**
+     * @return HasMany
+     */
+    public function enrolments(): HasMany
+    {
+        return $this->hasMany(Enrolment::class);
+    }
 }

@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 
 interface LearnerRepositoryInterface
 {
-    public function getAll(): Collection;
-    public function getByCourseName(string $courseName): Collection;
+    public function getAll(string $sortBy): Collection;
+
+    public function getByCourseName(string $courseName, string $sortBy): Collection;
 }

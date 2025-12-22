@@ -43,8 +43,8 @@
                     v-model="sortBy"
                     @change="fetchData">
                     <option value="">No Sorting</option>
-                    <option value="progress_asc">Progress: Low to High</option>
-                    <option value="progress_desc">Progress: High to Low</option>
+                    <option value="asc">Progress: Low to High</option>
+                    <option value="desc">Progress: High to Low</option>
                 </select>
             </div>
 
