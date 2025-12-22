@@ -26,7 +26,7 @@ class LearnerResource extends JsonResource
             }),
             "lastname" => $this->lastname,
             "firstname" => $this->firstname,
-            "average_progress" => $this->average_progress,
+            "average_progress" => round($this->average_progress),
         ];
     }
 }
