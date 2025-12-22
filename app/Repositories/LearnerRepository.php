@@ -28,12 +28,12 @@ class LearnerRepository implements LearnerRepositoryInterface
     }
 
     /**
-     * @param string $courseName
-     * @param string $sortBy
+     * @param string|null $courseName
+     * @param string|null $sortBy
      * @param int $paginate
      * @return Collection
      */
-    public function getByCourseName(string $courseName, string $sortBy, int $paginate = 15): Collection
+    public function getByCourseName(string $courseName = null, string $sortBy = null, int $paginate = 15): Collection
     {
         $learners = Learner::with(["courses"])
             ->withAvg("enrolments as average_progress", "progress")
