@@ -9,11 +9,11 @@ use Illuminate\Support\Collection;
 class LearnerRepository implements LearnerRepositoryInterface
 {
     /**
-     * @param string $sortBy
+     * @param string|null $sortBy
      * @param int $paginate
      * @return Collection
      */
-    public function getAll(string $sortBy, int $paginate = 15): Collection
+    public function getAll(string $sortBy = null, int $paginate = 15): Collection
     {
         $learners = Learner::with(["courses"])
             ->withAvg("enrolments as average_progress", "progress");
@@ -21,7 +21,7 @@ class LearnerRepository implements LearnerRepositoryInterface
         if ($sortBy === "desc") {
             $learners->orderBy("average_progress", "DESC");
         } elseif ($sortBy === "asc") {
-            $learners->orderBy("average_progress", "ASC");
+            $learners->orderBy("average_progress");
         }
 
         return $learners->get();
@@ -29,11 +29,11 @@ class LearnerRepository implements LearnerRepositoryInterface
 
     /**
      * @param string $courseName
-     * @param $sortBy
+     * @param string $sortBy
      * @param int $paginate
      * @return Collection
      */
-    public function getByCourseName(string $courseName, $sortBy, int $paginate = 15): Collection
+    public function getByCourseName(string $courseName, string $sortBy, int $paginate = 15): Collection
     {
         $learners = Learner::with(["courses"])
             ->withAvg("enrolments as average_progress", "progress")
